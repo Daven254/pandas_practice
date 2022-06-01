@@ -340,7 +340,11 @@ Other Joins:
 ### 3. Advanced Merging and Concatenation
 
 - Filtering Join
+  - Semi-join
+  - Anti-join
 - Concatenation
+  - Vertical join
+  - Appending
 - Validation/Verification
 
 ### 4. Merging Ordered and Time-Series Data
@@ -349,4 +353,3 @@ Other Joins:
 - As Of Merge
 - Queries
 - Pivot Table Melt
-
