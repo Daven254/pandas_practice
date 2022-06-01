@@ -1,10 +1,10 @@
-# Datacamp Pandas Curriculum
-
-# pandas_practice
+# Datacamp Pandas Curricula
 
 practicing pandas based on datacamp videos with various datasets
 
-## 1. Transforming DataFrames
+## Data Manipulation with Pandas
+
+### 1. Transforming DataFrames
 
 **DataFrame: homelessness**
 *Index(['region', 'state', 'individuals', 'family_members', 'state_pop'], dtype='object')*
@@ -94,7 +94,7 @@ If multiple values are of interest to filter a column, use the *.isin() method w
 - [x]  New Columns
   - This is done by attempting to select a column that doesn't exist. This will initiate a new column
 
-## 2. Aggregating DataFrames
+### 2. Aggregating DataFrames
 
 **DataFrame: sales**
 *Index(['store', 'type', 'department', 'date', 'weekly_sales', 'is_holiday', 'temperature_c', 'fuel_price_usd_per_l', 'unemployment'], dtype='object')*
@@ -139,24 +139,110 @@ Cumulative statistics can be performed on an entire column or columns and cumula
   - Pivoting on one Variable
   - Filling in Missing Values and Sum Values
 
-## 3. Slicing and Indexing DataFrames
+### 3. Slicing and Indexing DataFrames
+
+**DataFrame: temperatures**
+*Index(['date', 'city', 'country', 'avg_temp_c'], dtype='object')*
 
 - [x] Explicit Indexes
   - Setting and Removing Indexes
-  - Subsetting with .loc[]
-  - Setting Multi-level Indexes
-  - Sorting by Index Values
+    - Set the index or indexes using *.set_index()*. Multiple arguments can be used in list format for the method for multi-level indexing
+    - Reset the index in two ways:
+      1. Maintaining the current DataFrame using *.reset_index()*
+      2. Reseting the DataFrame to the initial ordering using *.reset_index(drop = True)*
+
+***
+Setting the index or indexes
+
+        temperatures.set_index('date')
+
+Multi-level indexing using a list of columns
+
+        temperatures.set_index(['date','avg_temp_c'])
+
+***
+
+Resetting the index or indexes
+
+        temperatures.reset_index()
+        
+        temperatures.reset_index(drop = True)
+***
+
+- Subsetting with .loc[]
+- Sorting by Index Values
+  - Sort the index or indexes using *.sort_index()* method on a DataFrame.
+  - If multiple indexes are available, *level* argument may be used to pick which goes first. *level* is assigned with a list of the indexes
+  - Use *ascending* and assign boolean value(s) to sort direction and match with a list of booleans to the levels used
+
+***
+This will only sort the top-most index
+
+        temperatures.sort_index()
+
+This statement can sort inner indexes as the priority sort
+
+        temperatures.sort_index(level = 'city')
+
+This statement will sort by 'country' column and then by 'city'. Note the order of ascending
+
+        temperatures_ind.sort_index(level = ['country','city'],ascending = [True,False])
+
+***
+
 - [x] Slicing and Subsetting with .loc and .iloc
   - Slicing Index Values
+    - Slice rows by using the loc function to slice by index, at the outer-most level
+    - Inner level slicing requires a tuple of the outer to inner list: *[('outer-index':'inner-index')]* with the loc function
   - Slicing in Both directions
+    - Slicing columns relies on using the loc function, but with a comma to associate with row:column pairing: *[('outer-index':'inner-index'):('outer-column':'inner-column')]*
+      - The index portion of the loc function can be omitted to only slice columns
   - Slicing Time Series
-  - Subsetting by Row/Column Number
-- [x] Working with Pivot Tables
-  - Pivoting by Column
-  - Subsetting Pivot Tables
-  - Calculating on a Pivot Table 
 
-## 4. Creating and Visualizing DataFrames
+***
+
+After setting the indexes to 'country' and 'city':
+This first loc call subsets for the outer index, all 'country' in the DataFrame are subset for Pakistan to Russia, inclusive of the alphabetical countries in between in the DataFrame
+
+        temperatures.loc['Pakistan':'Russia']
+
+This next loc call will subset the DataFrame based on all 'country' and 'city' values in between the selected countries and cities, alphabetically
+
+        temperatures.loc[('Pakistan','Lahore'):('Russia','Moscow')]
+
+        temperatures.loc[("India","Hyderabad"):("Iraq", "Baghdad")]
+
+Calling loc without the indexes selected, but with columns selected will subset the DataFrame based on the columsn
+
+        temperatures.loc[:,"date":"avg_temp_c"]
+
+Adding the index selections will then subset both the rows and columns appropriately
+
+        temperatures.loc[("India","Hyderabad"):("Iraq", "Baghdad"),"date":"avg_temp_c"]
+
+***
+
+- [x] Working with Pivot Tables
+  Create a pivot table from the DataFrame using the *.pivot_table() method
+  Arguments for this method include:
+  1. *values* which are selected values of interest
+  2. *columns* which are the column or columns (via list) that we want to use as columns in the pivot table
+  3. *index* which is like *columns* will take a value or list of values that should be used to index the pivot table
+
+  - Pivoting by Column
+
+***
+Creates a pivot table that has index values based on the country and city, columns that are each year, and average temperature values as the content of the row:column pairing
+
+      temp_by_country_city_vs_year = temperatures.pivot_table(values= 'avg_temp_c', columns = 'year', index = ('country','city'))
+***
+
+- Subsetting Pivot Tables
+  - Subset the pivot table using the same technique as subsetting a DataFrame
+- Calculating on a Pivot Table
+  -Calculations are done on each column with traditional functions like *.mean()* or *.max()*
+
+### 4. Creating and Visualizing DataFrames
 
 **DataFrame : avocados : [1014 rows x 6 columns]**
 *Index(['date', 'type', 'year', 'avg_price', 'size', 'nb_sold'], dtype='object')*
@@ -192,12 +278,75 @@ Further adding *.sum()* in conjunction will produce a sum of *True* values, whic
 ***
 
 - [x] Creating Dataframes
+    *pd.DataFrame('list')*
+    *pd.DataFrame('dictionary')*
+
   - List of Dictionaries
   - Dictionary of Lists
+
+***
+Create a list of dictionaries with new data
+
+      avocados_list = [{"date": "2019-11-03", "small_sold": 10376832,"large_sold": 7835071},{"date":"2019-11-10", "small_sold":10717154,"large_sold": 8561348}
+      avocados_2019 = pd.DataFrame(avocados_list)
+
+Create a dictionary of lists with new data
+
+      avocados_dict = {"date": ["2019-11-17","2019-12-01"], "small_sold": [10859987,9291631], "large_sold": [7674135,6238096]}
+      avocados_2019 = pd.DataFrame(avocados_dict)
+
 - [x] Reading and Writing CSVs
   - CSV to DataFrame
-  - DataFrame to CSV
+    Use *pd.read_csv('file_path')*
 
-Practice datasets:
+***
 
-1. [netflix_titles.csv](https://www.kaggle.com/datasets/shivamb/netflix-shows)
+      airline_bumping = pd.read_csv("airline_bumping.csv")
+
+***
+
+- DataFrame to CSV
+  Use *pd.to_csv('destination/name.csv')*
+
+***
+
+      airline_totals_sorted.to_csv("airline_totals_sorted.csv")
+
+***
+***
+***
+***
+***
+
+## Joining Data with Pandas
+
+### 1. Data Merging Basics
+
+Inner Joins/Merges:
+
+- One-to-One Merges
+- One-to-Many Merges
+- Multiple Merges
+
+### 2. Merging Tables with Different Join Types
+
+Other Joins:
+
+- Left Joins/Right Joins
+- Outer Joins
+- Self Join
+- Merging on Index/Indexes
+
+### 3. Advanced Merging and Concatenation
+
+- Filtering Join
+- Concatenation
+- Validation/Verification
+
+### 4. Merging Ordered and Time-Series Data
+
+- Ordered Merge
+- As Of Merge
+- Queries
+- Pivot Table Melt
+
