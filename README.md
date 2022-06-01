@@ -324,32 +324,32 @@ Create a dictionary of lists with new data
 
 Inner Joins/Merges:
 
-- One-to-One Merges
-- One-to-Many Merges
-- Multiple Merges
+- [x] One-to-One Merges
+- [x] One-to-Many Merges
+- [x] Multiple Merges
 
 ### 2. Merging Tables with Different Join Types
 
 Other Joins:
 
-- Left Joins/Right Joins
-- Outer Joins
-- Self Join
-- Merging on Index/Indexes
+- [x] Left Joins/Right Joins
+- [x] Outer Joins
+- [x] Self Join
+- [x] Merging on Index/Indexes
 
 ### 3. Advanced Merging and Concatenation
 
-- Filtering Join
+- [x] Filtering Join
   - Semi-join
   - Anti-join
-- Concatenation
+- [x] Concatenation
   - Vertical join
   - Appending
-- Validation/Verification
+- [x] Validation/Verification
 
 ### 4. Merging Ordered and Time-Series Data
 
-- Ordered Merge
-- As Of Merge
-- Queries
-- Pivot Table Melt
+- [x] Ordered Merge
+- [x] As Of Merge
+- [x] Queries
+- [x] Pivot Table Melt
